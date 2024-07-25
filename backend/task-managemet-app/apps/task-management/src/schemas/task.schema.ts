@@ -7,7 +7,7 @@ import { TaskPriority } from '../types/taskPriority.enum';
 export class Task extends AbstractDocument {
   @Prop({ required: true })
   title: string;
-
+ 
   @Prop({ required: false })
   description?: string;
 
