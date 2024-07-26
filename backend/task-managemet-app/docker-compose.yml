@@ -1,4 +1,13 @@
 services:
+  redis:
+    image: redis
+    networks:
+      - my-network
+    ports:
+      - 6379:6379
+    volumes:
+      - redis:/data
+
   task-management:
     build:
       context: .
@@ -8,6 +17,7 @@ services:
     env_file:
       - ./apps/task-management/.env
     depends_on:
+      - redis
       - mongodb-primary
       - mongodb-secondary
       - mongodb-arbiter
@@ -64,5 +74,7 @@ networks:
     driver: bridge
 
 volumes:
+  redis:
+    driver: local
   mongodb_master_data:
     driver: local

@@ -1,32 +1,38 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { CreateTaskRequest } from './dto/create-task.request';
 import { TaskRepository } from './tasks.repository';
-
+import { Cache } from 'cache-manager';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { ClientKafka } from '@nestjs/microservices';
 @Injectable()
 export class TaskManagementService {
-  constructor(private readonly taskRepository: TaskRepository) {}
+  constructor(private readonly taskRepository: TaskRepository,
+    @Inject(CACHE_MANAGER) private readonly cacheManager:Cache,
+    // @Inject('NOTIFICATION_SERVICE') private readonly notificationClient:ClientKafka
+  ) {}
+
   async getAllTasks() {
+    console.log("invocked");
+    await this.cacheManager.set('cache_item',{key:30})
+    // this.notificationClient.emit("get_allTasks",)
+    const data=await this.cacheManager.get('cache_item')
+    console.log(data);
+    
     return this.taskRepository.find({});
   }
 
   async updateTasks(taskId: string, updateData: Partial<CreateTaskRequest>) {
-    // await this.redis.del(taskId);
     return this.taskRepository.findByIdAndUpdate(taskId, updateData);
   }
 
   async deleteTask(taskId: string) {
     await this.taskRepository.deleteById(taskId);
-    // await this.redis.del(taskId);
     return { success: 'Task deleted successfully' };
   }
 
   async getTask(taskId: string) {
-    // const cachedTask = await this.redis.get(taskId);
-    // if (cachedTask) {
-    //   return JSON.parse(cachedTask);
-    // }
+    // await this.
     const task = await this.taskRepository.findById(taskId);
-    // await this.redis.set(taskId, JSON.stringify(task), 'EX', 3600);
     return task;
   }
 

@@ -1,13 +1,18 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, UseInterceptors } from '@nestjs/common';
 import { TaskManagementService } from './task-management.service';
 import { CreateTaskRequest } from './dto/create-task.request';
+import { CacheInterceptor, CacheTTL } from '@nestjs/cache-manager';
 
 @Controller('tasks')
 export class TaskManagementController {
   constructor(private readonly taskManagementService: TaskManagementService) {}
 
+  // @UseInterceptors(CacheInterceptor) 
+  // @CacheTTL(30) 
   @Get()
   async getAllTasks() {
+    console.log("gey a;ll data");
+    
     return this.taskManagementService.getAllTasks();
   }
 
