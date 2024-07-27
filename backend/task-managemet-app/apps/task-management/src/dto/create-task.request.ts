@@ -5,8 +5,8 @@ import {
   IsNotEmpty,
   IsDateString,
 } from 'class-validator';
-import { TaskStatus } from '../../../../libs/common/src/types/taskStatus.enum';
-import { TaskPriority } from '../../../../libs/common/src/types/taskPriority.enum';
+import { TaskStatus } from '@app/common/types/taskStatus.enum';
+import { TaskPriority } from '@app/common/types/taskPriority.enum';
 
 export class CreateTaskRequest {
   @IsString()
