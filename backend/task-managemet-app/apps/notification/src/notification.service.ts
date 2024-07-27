@@ -1,13 +1,22 @@
 import { Injectable } from '@nestjs/common';
-import { taskCreatedEvent } from './task-created.event';
+
+import { NotificationGateway } from './notification.gateway';
+import { EventData } from '@app/common/types/EventType';
 
 @Injectable()
 export class NotificationService {
-  
-  getHello(): string {
-    return 'Hello World!';
+  constructor(private readonly notificationGateway: NotificationGateway) {}
+
+
+  handleTaskCreation(event: EventData) {
+    this.notificationGateway.sendTaskCreatedNotification(event);
   }
-  handleTaskCreation(taskCreatedEvent: {message:string}) {
-    console.log("Come inside notification ",taskCreatedEvent.message);
+
+  handleTaskUpdation(event: EventData) {
+    this.notificationGateway.sendTaskCreatedNotification(event);
+  }
+
+  handleTaskDeletion(event: EventData) {
+    this.notificationGateway.sendTaskCreatedNotification(event);
   }
 }

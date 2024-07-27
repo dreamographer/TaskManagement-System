@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { NotificationController } from './notification.controller';
 import { NotificationService } from './notification.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-
+import { NotificationGateway } from './notification.gateway';
 @Module({
   imports: [
     ClientsModule.register([
@@ -22,6 +22,6 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
     ]),
   ],
   controllers: [NotificationController],
-  providers: [NotificationService],
+  providers: [NotificationService,NotificationGateway],
 })
 export class NotificationModule {}

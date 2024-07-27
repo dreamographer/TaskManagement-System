@@ -34,7 +34,7 @@ interface RmqModuleOptions {
         options: {
           client: {
             clientId: 'notification',
-            brokers: ['kafka:9092'], //TODO :might want to update
+            brokers: ['kafka:9092'],
           },
           consumer: {
             groupId: 'notification-consumer',

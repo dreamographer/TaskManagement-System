@@ -4,7 +4,6 @@ import { TaskRepository } from './tasks.repository';
 import { Cache } from 'cache-manager';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { ClientKafka } from '@nestjs/microservices';
-import { taskCreatedEvent } from './task-created.event';
 @Injectable()
 export class TaskManagementService {
   constructor(
@@ -15,26 +14,42 @@ export class TaskManagementService {
   ) {}
 
   async createTask(request: CreateTaskRequest) {
-    this.notificationClient.emit('task_created', {message:request.title});
-    return this.taskRepository.create(request);
+    const res=await this.taskRepository.create(request);
+    this.notificationClient.emit('task_created', {
+      event: 'CREATED',
+      task:res
+    });
+
+    return res
   }
 
   async getAllTasks() {
+
     return this.taskRepository.find({});
   }
 
   async updateTasks(taskId: string, updateData: Partial<CreateTaskRequest>) {
-    return this.taskRepository.findByIdAndUpdate(taskId, updateData);
+    const res = await this.taskRepository.findByIdAndUpdate(taskId, updateData);
+
+    this.notificationClient.emit('task_updated', {
+      event: 'UPDATED',
+      task:res
+    });
+    
+
+    return res
   }
 
   async deleteTask(taskId: string) {
     await this.taskRepository.deleteById(taskId);
+    this.notificationClient.emit('task_deleted', {event:"DELETED",task:{_id:taskId} });
+
     return { success: 'Task deleted successfully' };
   }
 
   async getTask(taskId: string) {
-    // await this.
     const task = await this.taskRepository.findById(taskId);
+    
     return task;
   }
 }
