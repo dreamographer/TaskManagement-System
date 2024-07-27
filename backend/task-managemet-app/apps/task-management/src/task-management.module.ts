@@ -12,7 +12,6 @@ import * as redisStore from 'cache-manager-redis-store';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 // import { GatewayModule } from './gateway/gateway.module';
-// import { redisProvider } from './redis/redis.provider';
 
 interface RmqModuleOptions {
   name: string;
@@ -35,7 +34,7 @@ interface RmqModuleOptions {
         options: {
           client: {
             clientId: 'notification',
-            brokers: ['localhost:9092'], //TODO :might want to update
+            brokers: ['kafka:9092'], //TODO :might want to update
           },
           consumer: {
             groupId: 'notification-consumer',
@@ -48,7 +47,7 @@ interface RmqModuleOptions {
       store: redisStore,
       host: 'redis',
       port: 6379,
-      ttl:5
+      ttl: 5,
     }),
     DatabaseModule,
     MongooseModule.forFeature([{ name: Task.name, schema: TaskSchema }]),

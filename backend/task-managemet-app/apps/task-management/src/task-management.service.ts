@@ -4,20 +4,22 @@ import { TaskRepository } from './tasks.repository';
 import { Cache } from 'cache-manager';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { ClientKafka } from '@nestjs/microservices';
+import { taskCreatedEvent } from './task-created.event';
 @Injectable()
 export class TaskManagementService {
-  constructor(private readonly taskRepository: TaskRepository,
-    @Inject(CACHE_MANAGER) private readonly cacheManager:Cache,
-    // @Inject('NOTIFICATION_SERVICE') private readonly notificationClient:ClientKafka
+  constructor(
+    private readonly taskRepository: TaskRepository,
+    @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
+    @Inject('NOTIFICATION_SERVICE')
+    private readonly notificationClient: ClientKafka,
   ) {}
 
+  async createTask(request: CreateTaskRequest) {
+    this.notificationClient.emit('task_created', {message:request.title});
+    return this.taskRepository.create(request);
+  }
+
   async getAllTasks() {
-    console.log("invocked");
-    await this.cacheManager.set('cache_item',{key:30})
-    // this.notificationClient.emit("get_allTasks",)
-    const data=await this.cacheManager.get('cache_item')
-    console.log(data);
-    
     return this.taskRepository.find({});
   }
 
@@ -34,9 +36,5 @@ export class TaskManagementService {
     // await this.
     const task = await this.taskRepository.findById(taskId);
     return task;
-  }
-
-  async createTask(request: CreateTaskRequest) {
-    return this.taskRepository.create(request);
   }
 }
