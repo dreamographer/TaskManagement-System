@@ -1,38 +1,46 @@
-import {DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
-import React from "react";
+import { TASK } from "@/types/Task.type";
+import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
+import React, { memo, useCallback } from "react";
 interface Props {
   title: string;
-  id:string
+  tasks: TASK[];
 }
-const Section = ({ title,id }: Props) => {
+const Section = memo(function Section({ title, tasks }: Props) {
+  const onDragEnd = useCallback(() => {
+    //drag end logic
+  }, []);
   return (
-    <div>
-      <h1>{title}</h1>
-      <Droppable droppableId="lists" type="list" direction="horizontal">
-        {provided => (
-          <ol
-            {...provided.droppableProps}
-            ref={provided.innerRef}
-            className="flex gap-x-3 h-full"
-          >
-            <div className="flex-shrink-0 w-1" />
-            <Draggable draggableId={id} index={0}>
-              {provided => (
-                <div
-                  ref={provided.innerRef}
-                  {...provided.draggableProps}
-                  {...provided.dragHandleProps}
-                >
-                  Hello
-                </div>
-              )}
-            </Draggable>
-          </ol>
-        )}
-      </Droppable>
-      <div className="border">item</div>
-    </div>
+    <DragDropContext onDragEnd={onDragEnd}>
+      <div>
+        <h1>{title}</h1>
+        <Droppable droppableId="lists" type="list" direction="vertical">
+          {provided => (
+            <ol
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+              className=" gap-x-3 h-full"
+            >
+              <div className="flex-shrink-0 w-1" />
+              {tasks.map((task, index) => (
+                <Draggable key={task._id} draggableId={task._id} index={index}>
+                  {provided => (
+                    <div
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                      className="border p-3"
+                    >
+                      {task.title}
+                    </div>
+                  )}
+                </Draggable>
+              ))}
+            </ol>
+          )}
+        </Droppable>
+      </div>
+    </DragDropContext>
   );
-};
+});
 
 export default Section;

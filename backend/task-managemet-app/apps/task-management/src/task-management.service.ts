@@ -41,8 +41,11 @@ export class TaskManagementService {
   }
 
   async deleteTask(taskId: string) {
-    await this.taskRepository.deleteById(taskId);
-    this.notificationClient.emit('task_deleted', {event:"DELETED",task:{_id:taskId} });
+    const deletedTask=await this.taskRepository.findByIdAndDelete(taskId);
+    this.notificationClient.emit('task_deleted', {
+      event: 'DELETED',
+      task: deletedTask,
+    });
 
     return { success: 'Task deleted successfully' };
   }
