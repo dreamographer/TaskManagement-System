@@ -11,10 +11,12 @@ import { FormData } from "@/types/formData.type";
 const SERVER_ENDPOINT = process.env.NEXT_PUBLIC_SERVER_ENDPOINT;
 
 export default function Home() {
+  // State for Different sections
   const [inProgress, setinProgress] = useState<TASK[]>([]);
   const [todo, setTodo] = useState<TASK[]>([]);
   const [complete, setcomplete] = useState<TASK[]>([]);
-  const [allTasks, setAllTasks] = useState<TASK[]>([]);
+
+  // Socket connection for reatime updates
   useEffect(() => {
     const socket = io("http://localhost:3001");
 
@@ -22,8 +24,8 @@ export default function Home() {
       console.log("Connected to the server");
     });
 
+    // listning for the event and excicuting changes based on the event
     socket.on("TaskEvent", (data: { event: string; task: TASK }) => {
-      console.log("Received message:", data);
       switch (data.event) {
         case "UPDATED": {
           updateTasks(data.task);
@@ -44,6 +46,8 @@ export default function Home() {
       socket.disconnect();
     };
   }, []);
+
+  // Initial fetching of data
   useEffect(() => {
     async function getData() {
       try {
@@ -58,6 +62,7 @@ export default function Home() {
     getData();
   }, []);
 
+  // functions for socket sideEffects
   function addTasks(task: TASK) {
     switch (task.status) {
       case "TODO": {
@@ -91,32 +96,52 @@ export default function Home() {
       }
     }
   }
+
   function updateTasks(task: TASK) {
     switch (task.status) {
       case "TODO": {
-        setTodo(prev => [
-          ...prev.map(ele => (ele._id == task._id ? task : ele)),
-        ]);
+        const NotexistingTask = todo.find(ele => ele._id == task._id);
+        if (!NotexistingTask) {
+          removeExistingTask(task._id);
+          addTasks(task);
+        } else {
+          setTodo(prev => [
+            ...prev.map(ele => (ele._id == task._id ? task : ele)),
+          ]);
+        }
         break;
       }
       case "IN_PROGRESS": {
-        setinProgress(prev => [
-          ...prev.map(ele => (ele._id == task._id ? task : ele)),
-        ]);
+        const NotexistingTask = inProgress.find(ele => ele._id == task._id);
+        if (!NotexistingTask) {
+          removeExistingTask(task._id);
+          addTasks(task);
+        } else {
+          setinProgress(prev => [
+            ...prev.map(ele => (ele._id == task._id ? task : ele)),
+          ]);
+        }
         break;
       }
       case "COMPLETE": {
-        setcomplete(prev => [
-          ...prev.map(ele => (ele._id == task._id ? task : ele)),
-        ]);
+        const NotexistingTask = complete.find(ele => ele._id == task._id);
+        if (!NotexistingTask) {
+          removeExistingTask(task._id);
+          addTasks(task);
+        } else {
+          setcomplete(prev => [
+            ...prev.map(ele => (ele._id == task._id ? task : ele)),
+          ]);
+        }
         break;
       }
     }
   }
 
+  // Creating new Task
   const createTask = async (data: FormData) => {
     try {
-      const response = await axios.post(`${SERVER_ENDPOINT}`, data);
+      await axios.post(`${SERVER_ENDPOINT}`, data);
 
       console.log("Task created successfully");
     } catch (error) {
@@ -124,15 +149,53 @@ export default function Home() {
     }
   };
 
+  // Fn for 
+  async function updateStatus(taskId: string, status: string) {
+    try {
+      if (status == "INPROGRESS") {
+        status = "IN_PROGRESS";
+      }
+      const res = await axios.put(`${SERVER_ENDPOINT}/${taskId}`, { status });
+      console.log(res.data);
+    } catch (error) {
+      console.log("error in retriving data", error);
+    }
+  }
+
+  const onDragEnd = (result: any) => {
+    console.log(result);
+    const { destination, source, type, draggableId } = result;
+    if (!destination) {
+      return;
+    }
+
+    if (destination.droppableId == source.draggableId) {
+      return;
+    }
+
+    if (type == "card") {
+      updateStatus(draggableId, destination.droppableId.toUpperCase());
+    }
+  };
+
+  function removeExistingTask(id: string) {
+    setTodo(prev => [...prev.filter(ele => ele._id != id)]);
+
+    setinProgress(prev => [...prev.filter(ele => ele._id != id)]);
+
+    setcomplete(prev => [...prev.filter(ele => ele._id != id)]);
+  }
+
   return (
     <main className="min-w-screen">
-      <DragDropContext onDragEnd={() => {}}>
+      <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="lists" type="list" direction="horizontal">
           {provided => (
-            <div 
-            {...provided.droppableProps}
-            ref={provided.innerRef}
-            className=" w-full flex flex-1 justify-center gap-10 text-center">
+            <div
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+              className=" w-full flex flex-1 justify-center gap-10 text-center"
+            >
               <Section tasks={todo} title="Todo" />
               <Section tasks={inProgress} title="InProgress" />
               <Section tasks={complete} title="Complete" />

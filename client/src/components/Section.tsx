@@ -22,7 +22,7 @@ const Section = memo(function Section({ title, tasks }: Props) {
           >
             <div className="flex-shrink-0 w-1" />
             {tasks.map((task, index) => (
-              <Draggable key={task._id} draggableId={task._id} index={index}>
+              <Draggable key={task._id} draggableId={task._id} index={index} >
                 {provided => (
                   <Link href={`/dashboard/${task._id}`}>
                     {" "}

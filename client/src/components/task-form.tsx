@@ -68,6 +68,7 @@ export default function CreateTaskForm({defaultValue,onSubmit,type}:Props) {
                       placeholder="Title"
                       {...field}
                       defaultValue={defaultValue?.title}
+                      
                     />
                   </FormControl>
                   <FormMessage />

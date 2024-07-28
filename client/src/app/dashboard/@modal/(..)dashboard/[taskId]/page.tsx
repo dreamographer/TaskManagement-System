@@ -2,35 +2,21 @@
 import { TASK } from "@/types/Task.type";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import CreateTaskForm from "@/components/task-form";
 import { FormData } from "@/types/formData.type";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { redirect, useRouter } from "next/navigation";
+
+import { useRouter } from "next/navigation";
+import { format } from "date-fns";
+import { Button } from "@/components/ui/button";
+import DeleteAlert from "@/components/DeleteAlert";
 
 const SERVER_ENDPOINT = process.env.NEXT_PUBLIC_SERVER_ENDPOINT;
+
+// intersecting Route for TaskView
 const Page = ({ params: { taskId } }: { params: { taskId: string } }) => {
   const [task, setTask] = useState<TASK>();
-  const router=useRouter()
+  const router = useRouter();
+
   useEffect(() => {
     async function getData() {
       try {
@@ -42,6 +28,7 @@ const Page = ({ params: { taskId } }: { params: { taskId: string } }) => {
     }
     getData();
   }, []);
+
   async function updateTask(data: FormData) {
     try {
       const res = await axios.put(`${SERVER_ENDPOINT}/${taskId}`, data);
@@ -51,16 +38,17 @@ const Page = ({ params: { taskId } }: { params: { taskId: string } }) => {
     }
   }
 
-  async function handleDelete(id?: string) {
+  async function handleDelete() {
     try {
       const res = await axios.delete(`${SERVER_ENDPOINT}/${taskId}`);
       console.log(res.data);
-      
+
       router.back();
     } catch (error) {
       console.log("error in retriving data", error);
     }
   }
+
   return (
     <>
       <div className="fixed inset-0 flex items-center justify-center z-50">
@@ -69,36 +57,25 @@ const Page = ({ params: { taskId } }: { params: { taskId: string } }) => {
           <p>TaskDetails</p>
           <h1>{task?.title}</h1>
           <p>{task?.description}</p>
+          <p>{task?.status}</p>
+          <p>{task?.priority}</p>
+          <Button
+            variant={"outline"}
+            className="w-[240px] pl-3 text-left font-normal"
+          >
+            {task?.dueDate ? (
+              format(task?.dueDate, "PPP")
+            ) : (
+              <span>NO Date specified</span>
+            )}{" "}
+          </Button>
           <div className="flex gap-5">
             <CreateTaskForm
               type="update"
               onSubmit={updateTask}
               defaultValue={task}
             />
-            <AlertDialog>
-              <AlertDialogTrigger>
-                <button
-                  type="button"
-                  className="w-full px-4 py-2 bg-red-700 text-white rounded"
-                >
-                  DELETE
-                </button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    This action cannot be undone. This will permanently delete
-                    this task.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction onClick={() => handleDelete(task?._id)}>YES
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
+            <DeleteAlert handleDelete={handleDelete} />
           </div>
         </div>
       </div>
