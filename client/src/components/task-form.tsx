@@ -51,7 +51,7 @@ export default function CreateTaskForm({defaultValue,onSubmit,type}:Props) {
 
   return (
     <Dialog>
-      <DialogTrigger className="bg-blue-600 text-white  px-3 rounded">
+      <DialogTrigger className=" bg-black text-white py-2  font-light px-5 rounded-md">
         {type}
       </DialogTrigger>
       <DialogContent>

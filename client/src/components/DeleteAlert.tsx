@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -11,21 +11,16 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
-type Props={
-    handleDelete:()=>{}
-}
+type Props = {
+  handleDelete: () => {};
+};
 
 // Alert box for deleting a task
-const DeleteAlert = ({handleDelete}:Props) => {
+const DeleteAlert = ({ handleDelete }: Props) => {
   return (
     <AlertDialog>
-      <AlertDialogTrigger>
-        <button
-          type="button"
-          className="w-full px-4 py-2 bg-red-700 text-white rounded"
-        >
-          DELETE
-        </button>
+      <AlertDialogTrigger className="px-5  py-1 border-2 border-black rounded-md">
+        DELETE
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
@@ -44,6 +39,6 @@ const DeleteAlert = ({handleDelete}:Props) => {
       </AlertDialogContent>
     </AlertDialog>
   );
-}
+};
 
-export default DeleteAlert
+export default DeleteAlert;

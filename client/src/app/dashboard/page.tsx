@@ -168,8 +168,8 @@ export default function Home() {
   },[]);
 
   return (
-    <main className="min-w-screen bg-[] flex-1 ">
-      <div className="p-5 text-xl w-screen flex justify-between">
+    <main className="flex-1">
+      <div className="p-5 text-xl  flex justify-between">
         <h1>TASK MANGER</h1>
         <div className="w-10 h-10 bg-white p-3">
           <CiSettings />

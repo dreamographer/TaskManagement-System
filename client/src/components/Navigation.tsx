@@ -3,7 +3,7 @@ import React from 'react'
 import { RxAvatar } from "react-icons/rx";
 import CreateTaskForm from './task-form';
 import axios from 'axios';
-
+import { FormData } from '@/types/formData.type';
 const SERVER_ENDPOINT = process.env.NEXT_PUBLIC_SERVER_ENDPOINT;
 
 const Navigation = () => {
@@ -19,8 +19,8 @@ const Navigation = () => {
   };
   return (
     <div className="bg-white h-screen p-5">
-      <div className='flex justify-center flex-col text-center item-center'>
-        <RxAvatar className="text-4xl" />
+      <div className='flex flex-col justify-center items-center space-y-3 '>
+        <RxAvatar className="text-4xl justify-self-center" />
         <CreateTaskForm onSubmit={createTask} type="CREATE Task" />
       </div>
     </div> 

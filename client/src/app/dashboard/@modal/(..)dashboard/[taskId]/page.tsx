@@ -27,7 +27,7 @@ const Page = ({ params: { taskId } }: { params: { taskId: string } }) => {
       }
     }
     getData();
-  }, []);
+  }, [taskId]);
 
   async function updateTask(data: FormData) {
     try {
@@ -49,27 +49,50 @@ const Page = ({ params: { taskId } }: { params: { taskId: string } }) => {
     }
   }
 
+    const priorityMap = {
+      P1: "High",
+      P2: "Medium",
+      P3: "Low",
+      P4: "Very low",
+    };
+    const priorityColors = {
+      P1: "bg-red-500",
+      P2: "bg-yellow-400",
+      P3: "bg-green-400",
+      P4: "bg-gray-300",
+    };
+
   return (
     <>
       <div className="fixed inset-0 flex items-center justify-center z-50">
         <div className="fixed inset-0 bg-black opacity-30"></div>
-        <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md mx-auto space-y-4 z-10">
+        <div className="bg-white  rounded-lg shadow-xl p-6 w-full max-w-lg mx-auto space-y-4 z-10">
           <p>TaskDetails</p>
-          <h1>{task?.title}</h1>
+          <div className="flex justify-between">
+            {task?.priority && (
+              <div
+                className={`inline-block px-2 py-1 rounded-full text-sm font-medium text-white ${
+                  priorityColors[task.priority]
+                }`}
+              >
+                {priorityMap[task.priority]}{" "}
+              </div>
+            )}
+            <div className="w-pl-3 text-left text-sm ">
+            <span className="font-medium">Due:</span>
+              {task?.dueDate ? (
+                format(task?.dueDate, "PPP")
+              ) : (
+                <span>NO Date specified</span>
+              )}{" "}
+            </div>
+          </div>
+          <h1 className="font-bold text-xl">{task?.title}</h1>
+
           <p>{task?.description}</p>
           <p>{task?.status}</p>
-          <p>{task?.priority}</p>
-          <Button
-            variant={"outline"}
-            className="w-[240px] pl-3 text-left font-normal"
-          >
-            {task?.dueDate ? (
-              format(task?.dueDate, "PPP")
-            ) : (
-              <span>NO Date specified</span>
-            )}{" "}
-          </Button>
-          <div className="flex gap-5">
+        
+          <div className="flex gap-5 justify-end w-full">
             <CreateTaskForm
               type="update"
               onSubmit={updateTask}
