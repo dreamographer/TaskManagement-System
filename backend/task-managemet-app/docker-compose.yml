@@ -65,8 +65,6 @@ services:
       dockerfile: ./apps/notification/Dockerfile
       target: development
     command: npm run start:dev notification
-    env_file:
-      - ./apps/notification/.env
     depends_on:
       - redis
       - task-management

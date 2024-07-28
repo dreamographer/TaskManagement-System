@@ -7,6 +7,7 @@ import axios from "axios";
 import { useCallback, useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import { CiSettings } from "react-icons/ci";
+import { toast } from "react-toastify";
 const SERVER_ENDPOINT = process.env.NEXT_PUBLIC_SERVER_ENDPOINT;
 
 export default function Home() {
@@ -28,14 +29,17 @@ export default function Home() {
       switch (data.event) {
         case "UPDATED": {
           updateTasks(data.task);
+          toast.success('Task Updated')
           break;
         }
         case "CREATED": {
           addTasks(data.task);
+          toast.success("Task Created");
           break;
         }
         case "DELETED": {
           deleteTasks(data.task);
+          toast.warn("Task Deleted");
           break;
         }
       }
@@ -83,14 +87,17 @@ export default function Home() {
     switch (task.status) {
       case "TODO": {
         setTodo(prev => [...prev.filter(ele => ele._id != task._id)]);
+        
         break;
       }
       case "IN_PROGRESS": {
         setinProgress(prev => [...prev.filter(ele => ele._id != task._id)]);
+        
         break;
       }
       case "COMPLETE": {
         setcomplete(prev => [...prev.filter(ele => ele._id != task._id)]);
+        
         break;
       }
     }
@@ -107,6 +114,7 @@ export default function Home() {
           setTodo(prev => [
             ...prev.map(ele => (ele._id == task._id ? task : ele)),
           ]);
+          
         }
         break;
       }
@@ -119,6 +127,7 @@ export default function Home() {
           setinProgress(prev => [
             ...prev.map(ele => (ele._id == task._id ? task : ele)),
           ]);
+          
         }
         break;
       }
@@ -131,6 +140,7 @@ export default function Home() {
           setcomplete(prev => [
             ...prev.map(ele => (ele._id == task._id ? task : ele)),
           ]);
+          
         }
         break;
       }
@@ -144,7 +154,6 @@ export default function Home() {
         status = "IN_PROGRESS";
       }
       const res = await axios.put(`${SERVER_ENDPOINT}/${taskId}`, { status });
-      console.log(res.data);
     } catch (error) {
       console.log("error in retriving data", error);
     }
@@ -159,13 +168,15 @@ export default function Home() {
   }
 
   const onDragEnd = useCallback((result: any) => {
-    const { destination, source, type, draggableId } = result;
+    const { destination, source, draggableId } = result;
+    console.log(result);
+
     if (!destination || destination.droppableId == source.draggableId) {
       return;
     }
 
     updateStatus(draggableId, destination.droppableId.toUpperCase());
-  },[]);
+  }, []);
 
   return (
     <main className="flex-1">

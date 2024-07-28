@@ -62,28 +62,21 @@ project-root/
 
     ```bash
     git clone <repository-url>
-    cd project-root
+    cd taskmanagement-system
     ```
 
 2.  **Install Dependencies**:
 
-    Navigate to the root directory of the project and install the dependencies:
+    Navigate to the backend root directory of the project and install the dependencies:
 
     ```bash
+    cd ./backend/task-managemet-app/
     npm install
-    ```
-
-3.  **Start Services with Docker Compose**:
-
-    Use Docker Compose to start all the services:
-
-    ```bash
-    docker-compose up -d
     ```
 
 4.  **Environment Variables**:
 
-        Ensure that the environment variables are correctly set in a `.env` file. Here is an example of the required environment variables:
+        Ensure that the environment variables are correctly set in a `.env` file, in the location .env.example is located. Here is an example of the required environment variables:
 
         ```plaintext
         MONGODB_URI=mongodb://root:password123@mongodb-primary:27017/
@@ -91,6 +84,16 @@ project-root/
         REDIS_PASS=password
         REDIS_URI=redis://default:${REDIS_PASS}@redis:6379
     ```
+
+3.  **Start Services with Docker Compose**:
+
+    Use Docker Compose to start all the backend services:
+
+    ```bash
+    docker-compose up --build -V
+    ```
+
+
 ### Frontend Setup
 
 1. **Navigate to Client Directory**:
@@ -110,15 +113,18 @@ project-root/
     ```bash
     npm run dev
     ```
-4. **For Docker**:
-    <!--create dokcer image  -->
+4. **Docker Setup for Frontend**:
+
+    Alternatively, you can run the frontend using Docker:
     ```bash
     docker build -t task-management-system .
     ```
 4. **Run Docker Imgage**:
+
     ```bash
     docker run -p 4000:4000 task-management-system
     ```
+    
 ## Usage
 
 ### Accessing the Application
