@@ -1,5 +1,6 @@
 import { TASK } from "@/types/Task.type";
 import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
+import Link from "next/link";
 import React, { memo, useCallback } from "react";
 interface Props {
   title: string;
@@ -24,14 +25,17 @@ const Section = memo(function Section({ title, tasks }: Props) {
               {tasks.map((task, index) => (
                 <Draggable key={task._id} draggableId={task._id} index={index}>
                   {provided => (
-                    <div
-                      ref={provided.innerRef}
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                      className="border p-3"
-                    >
-                      {task.title}
-                    </div>
+                    <Link href={`/dashboard/${task._id}`}>
+                      {" "}
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        className="border p-3"
+                      >
+                        {task.title}
+                      </div>
+                    </Link>
                   )}
                 </Draggable>
               ))}
