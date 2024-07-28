@@ -1,5 +1,6 @@
 "use client";
 import Section from "@/components/Section";
+import CreateTaskForm from "@/components/task-form";
 import { TASK } from "@/types/Task.type";
 import { DragDropContext } from "@hello-pangea/dnd";
 import axios from "axios";
@@ -108,11 +109,10 @@ export default function Home() {
   return (
     <main className="min-w-screen">
       <div className=" w-full flex flex-1 justify-center gap-10 text-center">
-  
-          <Section tasks={todo} title="Todo" />
-          <Section tasks={inProgress} title="InProgress" />
-          <Section tasks={complete} title="Complete" />
-    
+        <Section tasks={todo} title="Todo" />
+        <Section tasks={inProgress} title="InProgress" />
+        <Section tasks={complete} title="Complete" />
+        <CreateTaskForm />
       </div>
     </main>
   );
