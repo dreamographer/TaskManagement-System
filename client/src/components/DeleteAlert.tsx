@@ -15,6 +15,7 @@ type Props={
     handleDelete:()=>{}
 }
 
+// Alert box for deleting a task
 const DeleteAlert = ({handleDelete}:Props) => {
   return (
     <AlertDialog>

@@ -6,6 +6,7 @@ import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { ClientKafka } from '@nestjs/microservices';
 @Injectable()
 export class TaskManagementService {
+
   constructor(
     private readonly taskRepository: TaskRepository,
     @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
@@ -36,7 +37,6 @@ export class TaskManagementService {
       task:res
     });
     
-
     return res
   }
 

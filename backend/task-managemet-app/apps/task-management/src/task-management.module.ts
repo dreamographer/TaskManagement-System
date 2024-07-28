@@ -11,12 +11,9 @@ import { Task, TaskSchema } from './schemas/task.schema';
 import * as redisStore from 'cache-manager-redis-store';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-// import { GatewayModule } from './gateway/gateway.module';
 
-interface RmqModuleOptions {
-  name: string;
-}
 
+// modules for the service
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -30,7 +27,7 @@ interface RmqModuleOptions {
     ClientsModule.register([
       {
         name: 'NOTIFICATION_SERVICE',
-        transport: Transport.KAFKA,
+        transport: Transport.KAFKA, //kafka as message brocker
         options: {
           client: {
             clientId: 'notification',
@@ -51,7 +48,6 @@ interface RmqModuleOptions {
     }),
     DatabaseModule,
     MongooseModule.forFeature([{ name: Task.name, schema: TaskSchema }]),
-    // GatewayModule,
   ],
   controllers: [TaskManagementController],
   providers: [
@@ -59,6 +55,5 @@ interface RmqModuleOptions {
     TaskRepository,
     { provide: APP_INTERCEPTOR, useClass: CacheInterceptor },
   ],
-  // providers: [TaskManagementService, TaskRepository, redisProvider],
 })
 export class TaskManagementModule {}

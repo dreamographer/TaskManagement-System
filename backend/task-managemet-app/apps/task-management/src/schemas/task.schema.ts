@@ -3,7 +3,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { TaskStatus } from '@app/common/types/taskStatus.enum';
 import { TaskPriority } from '@app/common/types/taskPriority.enum';
   
-
+// Databse schma for Tasks
 @Schema({ versionKey: false })
 export class Task extends AbstractDocument {
   @Prop({ required: true })

@@ -8,6 +8,7 @@ import {
 import { TaskStatus } from '@app/common/types/taskStatus.enum';
 import { TaskPriority } from '@app/common/types/taskPriority.enum';
 
+// DTO object for Tasks
 export class CreateTaskRequest {
   @IsString()
   @IsNotEmpty()

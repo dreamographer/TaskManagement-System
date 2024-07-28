@@ -7,7 +7,6 @@ import { EventData } from '@app/common/types/EventType';
 export class NotificationService {
   constructor(private readonly notificationGateway: NotificationGateway) {}
 
-
   handleTaskCreation(event: EventData) {
     this.notificationGateway.sendTaskCreatedNotification(event);
   }

@@ -2,27 +2,28 @@ import { TASK } from "@/types/Task.type";
 import { Draggable, Droppable } from "@hello-pangea/dnd";
 import Link from "next/link";
 import React, { memo, useCallback } from "react";
+import List from "./List";
 interface Props {
   title: string;
   tasks: TASK[];
 }
+
+// Section for Status
 const Section = memo(function Section({ title, tasks }: Props) {
-  const onDragEnd = useCallback(() => {
-    //drag end logic
-  }, []);
+
   return (
-    <div>
-      <h1>{title}</h1>
+    <div className="rounded bg-[#F4F4F4] h-screen overflow-y-scroll">
+      <h1 className="bg-white p-3 text-left text-lg">{title}</h1>
       <Droppable droppableId={title} type="card" direction="vertical">
         {provided => (
           <ol
             {...provided.droppableProps}
             ref={provided.innerRef}
-            className=" gap-x-3 h-full"
+            className=" gap-x-3 h-full "
           >
-            <div className="flex-shrink-0 w-1" />
+            <div className="flex-shrink-0 flex flex-col gap-5" />
             {tasks.map((task, index) => (
-              <Draggable key={task._id} draggableId={task._id} index={index} >
+              <Draggable key={task._id} draggableId={task._id} index={index}>
                 {provided => (
                   <Link href={`/dashboard/${task._id}`}>
                     {" "}
@@ -30,9 +31,8 @@ const Section = memo(function Section({ title, tasks }: Props) {
                       ref={provided.innerRef}
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
-                      className="border p-3"
                     >
-                      {task.title}
+                      <List task={task}/>
                     </div>
                   </Link>
                 )}

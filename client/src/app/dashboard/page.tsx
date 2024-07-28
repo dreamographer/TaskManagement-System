@@ -6,8 +6,7 @@ import { DragDropContext, Droppable } from "@hello-pangea/dnd";
 import axios from "axios";
 import { useCallback, useEffect, useState } from "react";
 import { io } from "socket.io-client";
-import { FormData } from "@/types/formData.type";
-
+import { CiSettings } from "react-icons/ci";
 const SERVER_ENDPOINT = process.env.NEXT_PUBLIC_SERVER_ENDPOINT;
 
 export default function Home() {
@@ -138,18 +137,7 @@ export default function Home() {
     }
   }
 
-  // Creating new Task
-  const createTask = async (data: FormData) => {
-    try {
-      await axios.post(`${SERVER_ENDPOINT}`, data);
-
-      console.log("Task created successfully");
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
-
-  // Fn for 
+  // Fns for kanban status updation
   async function updateStatus(taskId: string, status: string) {
     try {
       if (status == "INPROGRESS") {
@@ -162,22 +150,6 @@ export default function Home() {
     }
   }
 
-  const onDragEnd = (result: any) => {
-    console.log(result);
-    const { destination, source, type, draggableId } = result;
-    if (!destination) {
-      return;
-    }
-
-    if (destination.droppableId == source.draggableId) {
-      return;
-    }
-
-    if (type == "card") {
-      updateStatus(draggableId, destination.droppableId.toUpperCase());
-    }
-  };
-
   function removeExistingTask(id: string) {
     setTodo(prev => [...prev.filter(ele => ele._id != id)]);
 
@@ -186,8 +158,23 @@ export default function Home() {
     setcomplete(prev => [...prev.filter(ele => ele._id != id)]);
   }
 
+  const onDragEnd = useCallback((result: any) => {
+    const { destination, source, type, draggableId } = result;
+    if (!destination || destination.droppableId == source.draggableId) {
+      return;
+    }
+
+    updateStatus(draggableId, destination.droppableId.toUpperCase());
+  },[]);
+
   return (
-    <main className="min-w-screen">
+    <main className="min-w-screen bg-[] flex-1 ">
+      <div className="p-5 text-xl w-screen flex justify-between">
+        <h1>TASK MANGER</h1>
+        <div className="w-10 h-10 bg-white p-3">
+          <CiSettings />
+        </div>
+      </div>
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="lists" type="list" direction="horizontal">
           {provided => (
@@ -203,7 +190,6 @@ export default function Home() {
           )}
         </Droppable>
       </DragDropContext>
-      <CreateTaskForm onSubmit={createTask} type="CREATE" />
     </main>
   );
 }

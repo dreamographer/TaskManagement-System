@@ -16,8 +16,9 @@ import { CacheInterceptor, CacheTTL } from '@nestjs/cache-manager';
 export class TaskManagementController {
   constructor(private readonly taskManagementService: TaskManagementService) {}
 
-  @UseInterceptors(CacheInterceptor)
-  @CacheTTL(10)
+  // caching with redis
+  @UseInterceptors(CacheInterceptor) //all get requests will be cached
+  @CacheTTL(10) //set to 10 seconds
   @Get()
   async getAllTasks() {
     return this.taskManagementService.getAllTasks();
@@ -35,7 +36,7 @@ export class TaskManagementController {
 
   @Put(':id')
   async updateTasks(
-    @Body() request: CreateTaskRequest,
+    @Body() request:Partial<CreateTaskRequest>,
     @Param('id') taskId: string,
   ) {
     return this.taskManagementService.updateTasks(taskId, request);
