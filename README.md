@@ -136,6 +136,12 @@ project-root/
     ```bash
     npm install
     ```
+3. **Set up .env**;
+
+    ```
+    .env
+        NEXT_PUBLIC_SERVER_ENDPOINT='http://localhost:3000/tasks'
+    ```
 
 3. **Run the Client**:
 
