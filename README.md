@@ -13,27 +13,56 @@ This project is a Task Management System built using NestJS for the backend and 
 ## Project Structure
 ```
 project-root/
-├── apps/
-│ ├── taskmanager/
-│ │ ├── src/
-│ │ │ ├── main.ts
-│ │ │ ├── taskmanager.module.ts
-│ │ │ ├── taskmanager.service.ts
-│ │ │ ├── taskmanager.controller.ts
-│ ├── notification/
-│ │ ├── src/
-│ │ │ ├── main.ts
-│ │ │ ├── notification.module.ts
-│ │ │ ├── notification.service.ts
-│ │ │ ├── notification.controller.ts
-│ │ │ ├── notification.gateway.ts
+├── backend/
+│ ├── task-management-app/
+│ │ ├── apps/
+│ │ │ ├── notification/
+│ │ │ │ ├── src/
+│ │ │ │ │ ├── main.ts
+│ │ │ │ │ ├── notification.controller.ts
+│ │ │ │ │ ├── notification.gateway.ts
+│ │ │ │ │ ├── notification.module.ts
+│ │ │ │ │ ├── notification.service.ts
+│ │ │ ├── task-management/
+│ │ │ │ ├── src/
+│ │ │ │ │ ├── dto/
+│ │ │ │ │ | ├── create-task.request.ts
+│ │ │ │ │ ├── schemas/
+│ │ │ │ │ | ├── task.schemas.ts
+│ │ │ │ │ ├── main.ts
+│ │ │ │ │ ├── task-management.controller.ts
+│ │ │ │ │ ├── task-management.module.ts
+│ │ │ │ │ ├── task-management.service.ts
+│ │ │ │ │ ├── tasks.repository.ts
+│ │ ├── libs/
+│ │ │ ├── common/
+│ │ │ │ ├── src/
+│ │ │ │ | ├── database/
+│ │ │ │ │ | ├── abstract.repository.ts
+│ │ │ │ │ | ├── absract.schemas.ts
+│ │ │ │ │ | ├── database.module.ts
+│ │ │ │ │ ├── types/
+│ │ │ │ │ | ├── EventTypes.ts
+│ │ │ │ │ | ├── taskPriority.enum.ts
+│ │ │ │ │ | ├── taskStatus.enum.ts
+│ │ │ │ │ ├── index.ts
+│ │ ├── ...
 ├── client/
-│ ├── pages/
-│ │ ├── index.js
-│ ├── components/
-│ │ ├── TaskForm.js
-│ ├── public/
-│ ├── styles/
+│ ├── src/
+│ │ ├── app/
+│ │ │ │ ├── dashboard/
+│ │ │ │ │ ├── [taskID]/
+│ │ │ │ │ │ ├── page.tsx
+│ │ │ │ │ ├── @modal/
+│ │ │ │ │ | ├── (..dashboard)/
+│ │ │ │ │ | | ├── [taskID]/
+│ │ │ │ │ │ | | ├── page.tsx
+│ │ │ │ │ ├── layout.tsx
+│ │ │ │ │ ├── page.tsx
+│ │ ├── components/
+│ │ ├── lib/
+│ │ ├── types/
+│ │ ├── utils/
 │ ├── package.json
 ├── docker-compose.yml
 └── README.md

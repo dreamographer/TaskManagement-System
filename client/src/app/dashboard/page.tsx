@@ -154,6 +154,7 @@ export default function Home() {
         status = "IN_PROGRESS";
       }
       const res = await axios.put(`${SERVER_ENDPOINT}/${taskId}`, { status });
+      updateTasks(res.data)
     } catch (error) {
       console.log("error in retriving data", error);
     }
