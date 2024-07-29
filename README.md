@@ -11,7 +11,7 @@ This project is a Task Management System built using NestJS for the backend and 
 - [Technologies Used](#technologies-used)
 
 ## Project Structure
-
+```
 project-root/
 ├── apps/
 │ ├── taskmanager/
@@ -37,7 +37,7 @@ project-root/
 │ ├── package.json
 ├── docker-compose.yml
 └── README.md
-
+```
 ## Features
 
 - **Next.js Frontend**: Provides a user interface for adding tasks and receiving realtime notifications.

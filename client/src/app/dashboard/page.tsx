@@ -39,7 +39,7 @@ export default function Home() {
         }
         case "DELETED": {
           deleteTasks(data.task);
-          toast.warn("Task Deleted");
+          toast.warn("Task Delete");
           break;
         }
       }
