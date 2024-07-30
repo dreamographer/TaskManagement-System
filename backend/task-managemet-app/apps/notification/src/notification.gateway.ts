@@ -25,7 +25,7 @@ export class NotificationGateway
     console.log(`Client disconnected: ${client.id}`);
   }
 
-  sendTaskCreatedNotification(task: any) {
+  sendNotification(task: any) {
     this.server.emit('TaskEvent', task);
   }
 }

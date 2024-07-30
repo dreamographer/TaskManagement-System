@@ -8,14 +8,14 @@ export class NotificationService {
   constructor(private readonly notificationGateway: NotificationGateway) {}
 
   handleTaskCreation(event: EventData) {
-    this.notificationGateway.sendTaskCreatedNotification(event);
+    this.notificationGateway.sendNotification(event);
   }
 
   handleTaskUpdation(event: EventData) {
-    this.notificationGateway.sendTaskCreatedNotification(event);
+    this.notificationGateway.sendNotification(event);
   }
 
   handleTaskDeletion(event: EventData) {
-    this.notificationGateway.sendTaskCreatedNotification(event);
+    this.notificationGateway.sendNotification(event);
   }
 }

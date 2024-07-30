@@ -87,6 +87,7 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
     }
     return updatedDocument;
   }
+  
   async findByIdAndDelete(
     id: string,
   ): Promise<any> {
@@ -126,9 +127,4 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
     return;
   }
 
-  async startTransaction() {
-    const session = await this.connection.startSession();
-    session.startTransaction();
-    return session;
-  }
 }

@@ -67,8 +67,11 @@ services:
     command: npm run start:dev notification
     depends_on:
       - redis
-      - task-management
+      - mongodb-primary
+      - mongodb-secondary
+      - mongodb-arbiter
       - kafka
+      - task-management
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
