@@ -27,7 +27,7 @@ export default function Home() {
     // listning for the event and excicuting changes based on the event
     socket.on("TaskEvent", (data: { event: string; task: TASK }) => {
       switch (data.event) {
-        case "UPDATED": {
+        case "UPDATED": { 
           updateTasks(data.task);
           toast.success('Task Updated')
           break;
